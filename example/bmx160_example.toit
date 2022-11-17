@@ -9,7 +9,9 @@ main:
 
   device := bus.device bmx160.I2C_ADDRESS
   bmx160 := bmx160.BMX160 device
+  magdata := ?
 
   while true:
-    bmx160.get_all_data
+    magdata = bmx160.get_all_data
+    print magdata.to_string
     sleep --ms=100

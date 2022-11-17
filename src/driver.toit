@@ -65,23 +65,25 @@ class BMX160:
   set_accel_range range/AccelRange:
     accel_range_ = range.val
 
-  get_all_data:
+  get_all_data -> MAGData:
     data := reg_.read_bytes reg.MAG_DATA_ADDR 20
 
     magnx := calc_value data[0] data[1] MAGN_UT_LSB
     magny := calc_value data[2] data[3] MAGN_UT_LSB
     magnz := calc_value data[4] data[5] MAGN_UT_LSB
-    print "magnX: $(%.2f magnx) magnY: $(%.2f magny) magnZ: $(%.2f magnz)"
+    //print "magnX: $(%.2f magnx) magnY: $(%.2f magny) magnZ: $(%.2f magnz)"
 
     gyrox := calc_value data[8] data[9] gyro_range_
     gyroy := calc_value data[10] data[11] gyro_range_
     gyroz := calc_value data[12] data[13] gyro_range_
-    print "gyroX: $(%.2f gyrox) gyroY: $(%.2f gyroy) gyroZ: $(%.2f gyroz)"
+    //print "gyroX: $(%.2f gyrox) gyroY: $(%.2f gyroy) gyroZ: $(%.2f gyroz)"
 
     accelx := calc_value data[14] data[15] (accel_range_ * 9.8)
     accely := calc_value data[16] data[17] (accel_range_ * 9.8)
     accelz := calc_value data[18] data[19] (accel_range_ * 9.8)
-    print "accelY: $(%.2f accelx) accelY: $(%.2f accely) accelZ: $(%.2f accelz)"
+    //print "accelY: $(%.2f accelx) accelY: $(%.2f accely) accelZ: $(%.2f accelz)"
+
+    return MAGData magnx magny magnz gyrox gyroy gyroz accelx accely accelz
   
   calc_value dataLSB dataMSB multiplier -> float:
     value := ((dataMSB << 8) | (dataLSB)).sign_extend --bits=16
@@ -105,3 +107,20 @@ class AccelRange:
   static MG_LSB_4G/GyroRange ::= GyroRange.private_ 0.000122070
   static MG_LSB_8G/GyroRange ::= GyroRange.private_ 0.000244141
   static MG_LSB_16G/GyroRange ::= GyroRange.private_ 0.000488281
+
+class MAGData:
+
+  mx  := ?
+  my  := ?
+  mz  := ?
+  gx  := ?
+  gy  := ?
+  gz  := ?
+  ax := ?
+  ay := ?
+  az := ?
+
+  constructor .mx .my .mz .gx .gy .gz .ax .ay .az:
+
+  to_string -> string:
+    return "magnX: $(%.2f mx) magnY: $(%.2f my) magnZ: $(%.2f mz) gyroX: $(%.2f gx) gyroY: $(%.2f gy) gyroZ: $(%.2f gz) accelY: $(%.2f ax) accelY: $(%.2f ay) accelZ: $(%.2f az)"
