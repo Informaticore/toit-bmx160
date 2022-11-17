@@ -1,4 +1,4 @@
-# toit-dps368
+# toit-bmx160
 Library to control a BMX160 9-Axis Sensor with toitlang
 
 ## Getting Started
