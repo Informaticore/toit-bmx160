@@ -1,0 +1,6 @@
+# Toit Lock File.
+prefixes:
+  bmx160: ..
+packages:
+  ..:
+    path: ..
